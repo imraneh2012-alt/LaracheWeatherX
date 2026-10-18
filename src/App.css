@@ -1,0 +1,68 @@
+.App {
+  text-align: center;
+  background-color: #1976d2;
+  min-height: 100vh;
+  color: white;
+}
+
+.buttont{
+  width: 90px;
+  height: 40px;
+  background-color: #283593;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  letter-spacing: 2px;
+  transition: 0.3s;
+}
+
+.buttont:hover{
+  background-color: hsl(233, 57%, 47%);
+}
+
+.buttont:active{
+  background-color: hsl(233, 57%, 57%);
+}
+
+/* fonts faces */
+/* GOOGLE SANS */
+@font-face {
+  font-family: google-sans;
+  src: url("/public/fonts/GoogleSans/GoogleSans-Regular.ttf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: google-sans;
+  src: url("/public/fonts/GoogleSans/GoogleSans-Medium.ttf");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: google-sans;
+  src: url("/public/fonts/GoogleSans/GoogleSans-Bold.ttf");
+  font-weight: 800;
+}
+/*== GOOGLE SANS ==*/
+/* RUBIK */
+@font-face {
+  font-family: rubik;
+  src: url("/public/fonts/rubik/Rubik-Regular.ttf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: rubik;
+  src: url("/public/fonts/rubik/Rubik-Medium.ttf");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: rubik;
+  src: url("/public/fonts/rubik/Rubik-Bold.ttf");
+  font-weight: 800;
+}
+/*== RUBIK ==*/
+
+/*== fonts faces ==*/
