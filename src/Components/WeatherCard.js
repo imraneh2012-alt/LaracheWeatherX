@@ -2,19 +2,26 @@
 import { Container } from "@mui/material";
 import Card from '@mui/material/Card';
 import CloudIcon from '@mui/icons-material/Cloud';
+import CircularProgress from '@mui/material/CircularProgress';
 //== MUI COMPONENTS ==
 // REACT IMPORTS
 import { useEffect, useState } from "react";
 //== REACT IMPORTS ==
 
-import axios from "axios";
 import moment from "moment/moment";
 import 'moment/locale/ar';
 import { useTranslation } from 'react-i18next';
+import { useSelector, useDispatch } from "react-redux";
+import { fetchWeatherApi } from "../reduxsSlices/weatherApiSlice";
 
 moment.locale("en")
 
 export default function WeatherCard(){
+
+    // import states from the state object in the weather api slice
+    const weatherInformation = useSelector((state) => {return state.weatherApi.weather})
+    const isLoading = useSelector((state) => {return state.weatherApi.isLoading})
+    const dispatch = useDispatch()
 
     const [lang, setLang] = useState("en")
     
@@ -22,18 +29,11 @@ export default function WeatherCard(){
 
     const [dateAndTime, setDateAndTime] = useState(null)
 
-    const [weatherInformation, setWeatherInformation] = useState({
-        temp: null,
-        minTemp: null,
-        maxTemp: null,
-        description: "",
-        icon: "",
-    })
+    // we don't need to do a state for weather api 
 
     // eslint-disable-next-line eqeqeq
     const direction = lang == "ar" ? "rtl" : "ltr";
 
-    let cancelAxios = null;
 
     useEffect(() => {
         i18n.changeLanguage(lang)
@@ -42,34 +42,8 @@ export default function WeatherCard(){
     useEffect(() => {
 
         setDateAndTime(moment().format('MMMM Do YYYY, h:mm:ss a'))
-
-        console.log("rendering api")
-        axios
-            .get("https://api.openweathermap.org/data/2.5/weather?lat=35.19321&lon=-6.15572&appid=79db85a1c5d72366f0259ace0bb1f739", {
-                cancelToken: new axios.CancelToken((c) => {
-                    cancelAxios = c;
-                }),
-            })
-            .then((response) => {
-                console.log(response.data.main.temp - 273)
-                setWeatherInformation({
-                    temp: Math.round(response.data.main.temp - 273),
-                    minTemp: Math.round(response.data.main.temp_min - 273),
-                    maxTemp: Math.round(response.data.main.temp_max - 273),
-                    description: response.data.weather[0].description,
-                    icon: response.data.weather[0].icon,
-                })
-                console.log(weatherInformation)
-                console.log(response.data)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-
-            return () => {
-                console.log("canceling")
-                cancelAxios()
-            }
+        // no nessecery to do the api request her
+        dispatch(fetchWeatherApi())
     }, [])
 
     function handleChangeLang(){
@@ -145,9 +119,13 @@ export default function WeatherCard(){
                                 fontWeight: "500", 
                                 padding: "0px", 
                                 alignSelf: "start"}}>{weatherInformation.temp}°C</h6>
+                            
+                            {isLoading ? <CircularProgress style={{color: "white", alignSelf: "center"}} aria-label="Loading…"/> : null}
+                            
 
                             {/* CURRENT WEATHER ICON */}
                             <img src={`https://openweathermap.org/payload/api/media/file/${weatherInformation.icon}.png`} alt=""/>
+                            {isLoading ? <CircularProgress style={{color: "white", alignSelf: "start", marginRight: "40px"}} aria-label="Loading…"/> : null}
                             {/*== CURRENT WEATHER ICON ==*/}
 
                         </div>
@@ -156,8 +134,10 @@ export default function WeatherCard(){
 
                         <div style={{display: "flex", flexDirection: "row", justifySelf: "center"}}>
                             <h5 style={{margin: "7px"}}>{t("min")}: {weatherInformation.minTemp} °C</h5>
+                            {isLoading ? <CircularProgress style={{color: "white", alignSelf: "center", width: "25px"}} aria-label="Loading…"/> : null}
                             <span style={{fontSize: "25px"}}>|</span>
                             <h5 style={{margin: "7px"}}>{t("max")}: {weatherInformation.maxTemp} °C</h5>
+                            {isLoading ? <CircularProgress style={{color: "white", alignSelf: "center", width: "25px"}} aria-label="Loading…"/> : null}
                         </div>
                         
                     </div>
